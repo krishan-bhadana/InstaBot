@@ -1,13 +1,13 @@
 import requests, urllib
 
 APP_ACCESS_TOKEN = '1475677391.44be0c0.bbef974724754bf59a7e631532443173'
-#Token Owner : AVinstaBot.main
-#Sandbox Users : AVinstaBot.test0, AVinstaBot.test1, AVinstaBot.test2...... AVinstaBot.test10 
+#Token Owner : k_b.96
+#Sandbox Users : insta.mriu.test.3
 
 BASE_URL = 'https://api.instagram.com/v1/'
 
 '''
-Function declaration to get your own info
+Function to get your own info
 '''
 
 def self_info():
@@ -28,7 +28,7 @@ def self_info():
 
 
 '''
-Function declaration to get the ID of a user by username
+Function to get the ID of a user by username
 '''
 
 
@@ -65,7 +65,7 @@ def get_user_info(insta_username):
         if len(user_info['data']):
             print 'Username: %s' % (user_info['data']['username'])
             print 'No. of followers: %s' % (user_info['data']['counts']['followed_by'])
-            print 'No. of people you are following: %s' % (user_info['data']['counts']['follows'])
+            print 'No. of people following: %s' % (user_info['data']['counts']['follows'])
             print 'No. of posts: %s' % (user_info['data']['counts']['media'])
         else:
             print 'There is no data for this user!'
@@ -120,22 +120,47 @@ def get_user_post(insta_username):
     else:
         print 'Status code other than 200 received!'
 
+def like_unlike():
+    print "Fetching latest media !"
+    fetch_media()
+    print ""
+    print ""
+    media_id = current_media[0]
+    quest = int(raw_input('Select what do you want to do:\n'
+                          '1. Get no of likes on recent post.\n'
+                          '2. Like post.\n'
+                          '3. Remove like from a post\n'))
+    if quest == 1:
+        print "Post by: %s has: %s likes" % (DATA[1], current_media[1])
+    if quest == 2:
+        request_url = (BASE_URL + 'media/%s/likes') % media_id
+        payload = {"access_token": ACCESS_TOKEN}
+        post_a_like = req.post(request_url, payload).json()
+        if post_a_like['meta']['code'] == 200:
+            print 'Successfully liked media'
+    if quest == 3:
+        request_url = (BASE_URL + 'media/%s/likes?access_token=%s') % (media_id, ACCESS_TOKEN)
+        payload = {"access_token": ACCESS_TOKEN}
+        delete_a_like = req.delete(request_url).json()
+        if delete_a_like['meta']['code'] == 200:
+            print 'Successfully removed like from post'
+
+
 
 def start_bot():
     while True:
         print '\n'
-        print 'Hey! Welcome to instaBot!'
-        print 'Here are your menu options:'
-        print "a.Get your own details\n"
-        print "b.Get details of a user by username\n"
-        print "c.Get your own recent post\n"
-        print "d.Get the recent post of a user by username\n"
-        # print "e.Get a list of people who have liked the recent post of a user\n"
-        # print "f.Like the recent post of a user\n"
-        # print "g.Get a list of comments on the recent post of a user\n"
-        # print "h.Make a comment on the recent post of a user\n"
-        # print "i.Delete negative comments from the recent post of a user\n"
-        print "j.Exit"
+        print 'Hey! Welcome to instaBot!\tSelect an option'
+        print "a. Get your own details\n"
+        print "b. Get details of a user by username\n"
+        print "c. Get your own recent post\n"
+        print "d. Get the recent post of a user by username\n"
+        print "e. Get a list of people who have liked the recent post of a user\n"
+        print "f. Like the recent post of a user\n"
+        print "g. Get a list of comments on the recent post of a user\n"
+        print "h. Make a comment on the recent post of a user\n"
+        print "i. Delete negative comments from the recent post of a user\n"
+        print "j. Exit"
 
         choice = raw_input("Enter you choice: ")
         if choice == "a":
@@ -148,9 +173,9 @@ def start_bot():
         elif choice == "d":
             insta_username = raw_input("Enter the username of the user: ")
             get_user_post(insta_username)
-        # elif choice=="e":
-        #    insta_username = raw_input("Enter the username of the user: ")
-        #    get_like_list(insta_username)
+        elif choice=="e":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_like_list(insta_username)
         # elif choice=="f":
         #    insta_username = raw_input("Enter the username of the user: ")
         #    like_a_post(insta_username)
