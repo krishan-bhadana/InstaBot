@@ -1,6 +1,6 @@
 import requests, urllib
 
-APP_ACCESS_TOKEN = '5629236876.1cc9688.86db895c038043b5960dc2949785299a'
+APP_ACCESS_TOKEN = '1475677391.44be0c0.bbef974724754bf59a7e631532443173'
 #Token Owner : AVinstaBot.main
 #Sandbox Users : AVinstaBot.test0, AVinstaBot.test1, AVinstaBot.test2...... AVinstaBot.test10 
 
@@ -9,7 +9,6 @@ BASE_URL = 'https://api.instagram.com/v1/'
 '''
 Function declaration to get your own info
 '''
-
 
 def self_info():
     request_url = (BASE_URL + 'users/self/?access_token=%s') % (APP_ACCESS_TOKEN)
