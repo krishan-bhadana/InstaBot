@@ -120,30 +120,46 @@ def get_user_post(insta_username):
     else:
         print 'Status code other than 200 received!'
 
-def like_unlike():
-    print "Fetching latest media !"
-    fetch_media()
-    print ""
-    print ""
-    media_id = current_media[0]
-    quest = int(raw_input('Select what do you want to do:\n'
-                          '1. Get no of likes on recent post.\n'
-                          '2. Like post.\n'
-                          '3. Remove like from a post\n'))
-    if quest == 1:
+
+def thepost():
+
+    request_url = (BASE_URL + "users/%s/media/recent?access_token=%s") % (id, ACCESS_TOKEN)
+    media = req.get(request_url).json()
+    if media:
+        media_ID = media['data'][item]['id']
+        media_link = media['data'][item]['link']
+        media_type = media['data'][item]['type']
+        media_likes = media['data'][item]['likes']['count']
+        media_user_like = media['data'][item]['user_has_liked']
+        print "Media ID : " + str(media_ID)
+        print "Media Link : " + str(media_link)
+        print " Media type : " + media_type
+        print "Total likes : " + str(media_likes)
+        print "Liked by you : " + str(media_user_like)
+        return media
+
+
+def like_unlikefunction():
+
+    media = thepost()
+    media_id= media['data'][item]['id']
+    media_likes = media['data'][item]['likes']['count']
+    option = int(raw_input('Select what do you want to do:\n'
+                          '1. Like post.\n'
+                          '2. Unlike post\n'))
+    if option == 1:
         print "Post by: %s has: %s likes" % (DATA[1], current_media[1])
-    if quest == 2:
         request_url = (BASE_URL + 'media/%s/likes') % media_id
         payload = {"access_token": ACCESS_TOKEN}
         post_a_like = req.post(request_url, payload).json()
         if post_a_like['meta']['code'] == 200:
             print 'Successfully liked media'
-    if quest == 3:
+    if option==2:
         request_url = (BASE_URL + 'media/%s/likes?access_token=%s') % (media_id, ACCESS_TOKEN)
-        payload = {"access_token": ACCESS_TOKEN}
+        #payload = {"access_token": ACCESS_TOKEN}
         delete_a_like = req.delete(request_url).json()
         if delete_a_like['meta']['code'] == 200:
-            print 'Successfully removed like from post'
+            print 'Successfully Unliked'
 
 
 
@@ -156,7 +172,7 @@ def start_bot():
         print "c. Get your own recent post\n"
         print "d. Get the recent post of a user by username\n"
         print "e. Get a list of people who have liked the recent post of a user\n"
-        print "f. Like the recent post of a user\n"
+        print "f. Like_unlike the recent post of a user\n"
         print "g. Get a list of comments on the recent post of a user\n"
         print "h. Make a comment on the recent post of a user\n"
         print "i. Delete negative comments from the recent post of a user\n"
@@ -176,21 +192,21 @@ def start_bot():
         elif choice=="e":
             insta_username = raw_input("Enter the username of the user: ")
             get_like_list(insta_username)
-        # elif choice=="f":
-        #    insta_username = raw_input("Enter the username of the user: ")
-        #    like_a_post(insta_username)
-        # elif choice=="g":
-        #    insta_username = raw_input("Enter the username of the user: ")
-        #    get_comment_list(insta_username)
-        # elif choice=="h":
-        #    insta_username = raw_input("Enter the username of the user: ")
-        #    make_a_comment(insta_username)
-        # elif choice=="i":
-        #    insta_username = raw_input("Enter the username of the user: ")
-        #    delete_negative_comment(insta_username)
+        elif choice=="f":
+            insta_username = raw_input("Enter the username of the user: ")
+            like_unlikefunction(insta_username)
+        elif choice=="g":
+            insta_username = raw_input("Enter the username of the user: ")
+            get_comment_list(insta_username)
+        elif choice=="h":
+            insta_username = raw_input("Enter the username of the user: ")
+            make_a_comment(insta_username)
+        elif choice=="i":
+            insta_username = raw_input("Enter the username of the user: ")
+            delete_negative_comment(insta_username)
         elif choice == "j":
-            exit()
+             exit()
         else:
-            print "wrong choice"
+             print "wrong choice"
 
 start_bot()
