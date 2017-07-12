@@ -1,4 +1,7 @@
 import requests, urllib
+from textblob import TextBlob
+from textblob.sentiments import NaiveBayesAnalyzer
+import json
 
 APP_ACCESS_TOKEN = '1475677391.44be0c0.bbef974724754bf59a7e631532443173'
 #Token Owner : k_b.96
@@ -161,6 +164,7 @@ def like_unlikefunction(username):
         if delete_a_like['meta']['code'] == 200:
             print 'Successfully Unliked'
 
+
 def get_like_list(username):
     media = thepost(username)
     media_likes = media['data'][0]['likes']['count']
@@ -173,11 +177,8 @@ def get_like_list(username):
         i=i+1
 
 
-
 def post_comment(username):
 
-    #quest = int(raw_input('Select what do you want to do:\n'
-                         #'1. Comment on recent media.\n2. Delete a negative comment.\n')
     media = thepost(username)
     media_id = media['data'][0]['id']
     comment = raw_input("Enter 'comment' you want to post")
@@ -189,6 +190,37 @@ def post_comment(username):
     else:
         print 'Unable to comment: Try again'
 
+
+def delete_negative_comment(username):
+    media = thepost(username)
+    media_id = media['data'][0]['id']
+    request_url = (BASE_URL + 'media/%s/comments/?access_token=%s') % (media_id, APP_ACCESS_TOKEN)
+    get_comment = requests.get(request_url).json()
+    print get_comment
+    if get_comment['meta']['code'] == 200:
+        if len(get_comment['data']):
+            for i in range(0, len(get_comment['data'])):
+
+                comment_id = get_comment['data'][i]['id']
+                comment_text = get_comment['data'][i]['text']
+                print comment_id
+                blob = TextBlob(comment_text, analyzer=NaiveBayesAnalyzer())
+                if (blob.sentiment.p_neg > blob.sentiment.p_pos):
+                    print 'Negative comment : %s' % (comment_text)
+                    delete_url = (BASE_URL + 'media/%s/comments/%s/?access_token=%s') % (media_id, comment_id,
+                                                                                             APP_ACCESS_TOKEN)
+                    delete_info = requests.delete(delete_url).json()
+
+                    if delete_info['meta']['code'] == 200:
+                        print 'Negative comment successfully deleted'
+                    else:
+                        print 'Unable to delete comment'
+                else:
+                    print 'No negative comment'
+        else:
+            print 'There are no existing comments on the post'
+    else:
+        print 'Status code other than 200 recieved'
 
 def insta_tasks(username):
     choice='Z'
@@ -202,7 +234,7 @@ def insta_tasks(username):
         print "G. Delete negative comments from the recent post\n"
         print "H. Exit"
 
-        choice = raw_input("Enter you choice: ").upper()
+        choice = raw_input("Enter your choice: ").upper()
         if choice == "A":
             if username == 'k_b.96':
                 self_info()
