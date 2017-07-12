@@ -167,15 +167,18 @@ def start_bot():
     while True:
         print '\n'
         print 'Hey! Welcome to instaBot!\tSelect an option'
-        print "a. Get your own details\n"
-        print "b. Get details of a user by username\n"
-        print "c. Get your own recent post\n"
-        print "d. Get the recent post of a user by username\n"
-        print "e. Get a list of people who have liked the recent post of a user\n"
-        print "f. Like_unlike the recent post of a user\n"
-        print "g. Get a list of comments on the recent post of a user\n"
-        print "h. Make a comment on the recent post of a user\n"
-        print "i. Delete negative comments from the recent post of a user\n"
+        input=raw_input("1. Go to your own profile\n2. Go to another user's profile\n3.Exit instabot")
+        if input == 1:
+            username = 'k_b.96'
+        else:
+            username=raw_input('Enter username')
+        print "a. Get details\n"
+        print "c. Get recent post\n"
+        print "e. Get a list of people who have liked the recent post\n"
+        print "f. Like_unlike the recent post\n"
+        print "g. Get a list of comments on the recent post\n"
+        print "h. Make a comment on the recent post\n"
+        print "i. Delete negative comments from the recent post\n"
         print "j. Exit"
 
         choice = raw_input("Enter you choice: ")
