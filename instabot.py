@@ -13,7 +13,7 @@ BASE_URL = 'https://api.instagram.com/v1/'
 Function to get your own info
 '''
 
-def self_info():
+def self_info():       # function to print self info
     request_url = (BASE_URL + 'users/self/?access_token=%s') % (APP_ACCESS_TOKEN)
     print 'GET request url : %s' % (request_url)
     user_info = requests.get(request_url).json()
@@ -35,12 +35,12 @@ Function to get the ID of a user by username
 '''
 
 
-def get_user_id(insta_username):
+def get_user_id(insta_username):   # this function will return the user id of provided username
     request_url = (BASE_URL + 'users/search?q=%s&access_token=%s') % (insta_username, APP_ACCESS_TOKEN)
     print 'GET request url : %s' % (request_url)
     user_info = requests.get(request_url).json()
 
-    if user_info['meta']['code'] == 200:
+    if user_info['meta']['code'] == 200:  #this code tells if everything is fine
         if len(user_info['data']):
             return user_info['data'][0]['id']
         else:
@@ -77,7 +77,7 @@ def get_user_info(insta_username):
 
 
 '''
-Function declaration to get your recent post
+Function declaration to get your recent post, the file gets downloaded to the directory
 '''
 
 
@@ -115,7 +115,7 @@ def get_user_post(insta_username):
     if user_media['meta']['code'] == 200:
         if len(user_media['data']):
             image_name = user_media['data'][0]['id'] + '.jpeg'
-            image_url = user_media['data'][0]['images']['standard_resolution']['url']
+            image_url = user_media['data'][0]['images']['standard_resolution']['url']  # there are actually 3 quality available
             urllib.urlretrieve(image_url, image_name)
             print 'Your image has been downloaded!'
         else:
@@ -191,7 +191,7 @@ def post_comment(username):
         print 'Unable to comment: Try again'
 
 
-def delete_negative_comment(username):
+def delete_negative_comment(username):  # the textblob will analyse the comments and delete negative comments
     media = thepost(username)
     media_id = media['data'][0]['id']
     request_url = (BASE_URL + 'media/%s/comments/?access_token=%s') % (media_id, APP_ACCESS_TOKEN)
@@ -222,7 +222,8 @@ def delete_negative_comment(username):
     else:
         print 'Status code other than 200 recieved'
 
-def insta_tasks(username):
+
+def insta_tasks(username):   # all the tasks availale for user
     choice='Z'
     while choice != 'H':
         print "\n-----------------------------------------------------------\nA. Get details\n"
@@ -250,7 +251,7 @@ def insta_tasks(username):
         elif choice == "D":
             like_unlikefunction(username)
         elif choice == "E":
-            get_comment_list(username)
+            get_comment_list(username)    # having problem printing the json file the whole for now
         elif choice == "F":
             post_comment(username)
         elif choice == "G":
