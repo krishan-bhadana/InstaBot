@@ -121,16 +121,16 @@ def get_user_post(insta_username):
         print 'Status code other than 200 received!'
 
 
-def thepost():
-
-    request_url = (BASE_URL + "users/%s/media/recent?access_token=%s") % (id, ACCESS_TOKEN)
-    media = req.get(request_url).json()
+def thepost(username):
+    id = get_user_id(username)
+    request_url = (BASE_URL + "users/%s/media/recent?access_token=%s") % (id, APP_ACCESS_TOKEN)
+    media = requests.get(request_url).json()
     if media:
-        media_ID = media['data'][item]['id']
-        media_link = media['data'][item]['link']
-        media_type = media['data'][item]['type']
-        media_likes = media['data'][item]['likes']['count']
-        media_user_like = media['data'][item]['user_has_liked']
+        media_ID = media['data'][0]['id']
+        media_link = media['data'][0]['link']
+        media_type = media['data'][0]['type']
+        media_likes = media['data'][0]['likes']['count']
+        media_user_like = media['data'][0]['user_has_liked']
         print "Media ID : " + str(media_ID)
         print "Media Link : " + str(media_link)
         print " Media type : " + media_type
@@ -139,25 +139,25 @@ def thepost():
         return media
 
 
-def like_unlikefunction():
+def like_unlikefunction(username):
 
-    media = thepost()
-    media_id= media['data'][item]['id']
-    media_likes = media['data'][item]['likes']['count']
+    media = thepost(username)
+    media_id= media['data'][0]['id']
+    media_likes = media['data'][0]['likes']['count']
     option = int(raw_input('Select what do you want to do:\n'
                           '1. Like post.\n'
                           '2. Unlike post\n'))
     if option == 1:
-        print "Post by: %s has: %s likes" % (DATA[1], current_media[1])
+        print "likes: %s" % (media_likes)
         request_url = (BASE_URL + 'media/%s/likes') % media_id
-        payload = {"access_token": ACCESS_TOKEN}
-        post_a_like = req.post(request_url, payload).json()
+        payload = {"access_token": APP_ACCESS_TOKEN}
+        post_a_like = requests.post(request_url, payload).json()
         if post_a_like['meta']['code'] == 200:
-            print 'Successfully liked media'
+            print 'Successfully liked'
     if option==2:
-        request_url = (BASE_URL + 'media/%s/likes?access_token=%s') % (media_id, ACCESS_TOKEN)
-        #payload = {"access_token": ACCESS_TOKEN}
-        delete_a_like = req.delete(request_url).json()
+        request_url = (BASE_URL + 'media/%s/likes?access_token=%s') % (media_id, APP_ACCESS_TOKEN)
+        payload = {"access_token": APP_ACCESS_TOKEN}
+        delete_a_like = requests.delete(request_url).json()
         if delete_a_like['meta']['code'] == 200:
             print 'Successfully Unliked'
 
