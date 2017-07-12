@@ -164,7 +164,7 @@ def like_unlikefunction():
 def insta_tasks(username):
     choice='Z'
     while choice != 'H':
-        print "\nA. Get details\n"
+        print "\n-----------------------------------------------------------\nA. Get details\n"
         print "B. Get recent post\n"
         print "C. Get a list of people who have liked the recent post\n"
         print "D. Like_unlike the recent post\n"
