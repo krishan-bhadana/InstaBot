@@ -161,55 +161,57 @@ def like_unlikefunction():
         if delete_a_like['meta']['code'] == 200:
             print 'Successfully Unliked'
 
+def insta_tasks(username):
+    choice='Z'
+    while choice != 'H':
+        print "\nA. Get details\n"
+        print "B. Get recent post\n"
+        print "C. Get a list of people who have liked the recent post\n"
+        print "D. Like_unlike the recent post\n"
+        print "E. Get a list of comments on the recent post\n"
+        print "F. Make a comment on the recent post\n"
+        print "G. Delete negative comments from the recent post\n"
+        print "H. Exit"
+
+        choice = raw_input("Enter you choice: ").upper()
+        if choice == "A":
+            if username == 'k_b.96':
+                self_info()
+            else:
+                get_user_info(username)
+        elif choice == "B":
+            if username == 'k_b.96':
+                get_own_post()
+            else:
+                get_user_post(username)
+        elif choice == "C":
+            get_like_list(username)
+        elif choice == "D":
+            like_unlikefunction(username)
+        elif choice == "E":
+            get_comment_list(username)
+        elif choice == "F":
+            make_a_comment(username)
+        elif choice == "G":
+            delete_negative_comment(username)
+        elif choice == "H":
+            exit()
+        else:
+            print "wrong choice"
 
 
 def start_bot():
     while True:
         print '\n'
         print 'Hey! Welcome to instaBot!\tSelect an option'
-        input=raw_input("1. Go to your own profile\n2. Go to another user's profile\n3.Exit instabot")
-        if input == 1:
+        input = raw_input("1. Go to your own profile\n2. Go to another user's profile\n3.Exit instabot")
+        if input == '1':
             username = 'k_b.96'
-        else:
-            username=raw_input('Enter username')
-        print "a. Get details\n"
-        print "c. Get recent post\n"
-        print "e. Get a list of people who have liked the recent post\n"
-        print "f. Like_unlike the recent post\n"
-        print "g. Get a list of comments on the recent post\n"
-        print "h. Make a comment on the recent post\n"
-        print "i. Delete negative comments from the recent post\n"
-        print "j. Exit"
-
-        choice = raw_input("Enter you choice: ")
-        if choice == "a":
-            self_info()
-        elif choice == "b":
-            insta_username = raw_input("Enter the username of the user: ")
-            get_user_info(insta_username)
-        elif choice == "c":
-            get_own_post()
-        elif choice == "d":
-            insta_username = raw_input("Enter the username of the user: ")
-            get_user_post(insta_username)
-        elif choice=="e":
-            insta_username = raw_input("Enter the username of the user: ")
-            get_like_list(insta_username)
-        elif choice=="f":
-            insta_username = raw_input("Enter the username of the user: ")
-            like_unlikefunction(insta_username)
-        elif choice=="g":
-            insta_username = raw_input("Enter the username of the user: ")
-            get_comment_list(insta_username)
-        elif choice=="h":
-            insta_username = raw_input("Enter the username of the user: ")
-            make_a_comment(insta_username)
-        elif choice=="i":
-            insta_username = raw_input("Enter the username of the user: ")
-            delete_negative_comment(insta_username)
-        elif choice == "j":
-             exit()
-        else:
-             print "wrong choice"
+            insta_tasks(username)
+        elif input == '2':
+            username = raw_input('Enter username')
+            insta_tasks(username)
+        elif input == '3':
+            exit()
 
 start_bot()
