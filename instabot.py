@@ -133,7 +133,7 @@ def thepost(username):
         media_user_like = media['data'][0]['user_has_liked']
         print "Media ID : " + str(media_ID)
         print "Media Link : " + str(media_link)
-        print " Media type : " + media_type
+        print "Media type : " + media_type
         print "Total likes : " + str(media_likes)
         print "Liked by you : " + str(media_user_like)
         return media
@@ -160,6 +160,35 @@ def like_unlikefunction(username):
         delete_a_like = requests.delete(request_url).json()
         if delete_a_like['meta']['code'] == 200:
             print 'Successfully Unliked'
+
+def get_like_list(username):
+    media = thepost(username)
+    media_likes = media['data'][0]['likes']['count']
+    id = media['data'][0]['id']
+    request_url = (BASE_URL + "media/%s/likes?access_token=%s") % (id, APP_ACCESS_TOKEN)
+    likers = requests.get(request_url).json()
+    i = 0
+    while i < media_likes:
+        print '\n'+likers['data'][i]['username']
+        i=i+1
+
+
+
+def post_comment(username):
+
+    #quest = int(raw_input('Select what do you want to do:\n'
+                         #'1. Comment on recent media.\n2. Delete a negative comment.\n')
+    media = thepost(username)
+    media_id = media['data'][0]['id']
+    comment = raw_input("Enter 'comment' you want to post")
+    payload = {"access_token": APP_ACCESS_TOKEN, 'text': comment}
+    request_url = (BASE_URL + 'media/%s/comments') % media_id
+    post_comment = requests.post(request_url, payload).json()
+    if post_comment['meta']['code'] == 200:
+        print 'Successfully commented'
+    else:
+        print 'Unable to comment: Try again'
+
 
 def insta_tasks(username):
     choice='Z'
@@ -191,7 +220,7 @@ def insta_tasks(username):
         elif choice == "E":
             get_comment_list(username)
         elif choice == "F":
-            make_a_comment(username)
+            post_comment(username)
         elif choice == "G":
             delete_negative_comment(username)
         elif choice == "H":
