@@ -7,6 +7,8 @@ APP_ACCESS_TOKEN = '1475677391.44be0c0.bbef974724754bf59a7e631532443173'
 #Token Owner : k_b.96
 #Sandbox Users : insta.mriu.test.3
 
+apikey='nQZFPPK4WqtzROI6pr7aDeU61vjTpfA7M0WOzOuvnWw'    # parallel dots api key
+
 BASE_URL = 'https://api.instagram.com/v1/'
 
 '''
@@ -223,6 +225,22 @@ def delete_negative_comment(username):  # the textblob will analyse the comments
         print 'Status code other than 200 recieved'
 
 
+def sentiment_analysis(username):
+
+    media = thepost(username)
+    media_id = media['data'][0]['id']
+    caption = media['data'][0]['caption']['text']
+    print "Based on Caption: ' "+caption+" ',  Sentiment analysis is as follows"
+    url = "http://apis.paralleldots.com/sentiment"
+    r =  requests.get( url, params={ "apikey": apikey, "sentence1": caption } )
+    if r.status_code != 200:
+        print "Oops something went wrong !"
+    r = json.loads(r.text)
+    r=r['sentiment'] * 100
+    a='%'
+    print "\n%.2f %s POSITIVITY "%(r,a)
+
+
 def insta_tasks(username):   # all the tasks availale for user
     choice='Z'
     while choice != 'H':
@@ -230,7 +248,7 @@ def insta_tasks(username):   # all the tasks availale for user
         print "B. Get recent post\n"
         print "C. Get a list of people who have liked the recent post\n"
         print "D. Like_unlike the recent post\n"
-        print "E. Get a list of comments on the recent post\n"
+        print "E. Sentiment analysis\n"
         print "F. Make a comment on the recent post\n"
         print "G. Delete negative comments from the recent post\n"
         print "H. Exit"
@@ -251,7 +269,7 @@ def insta_tasks(username):   # all the tasks availale for user
         elif choice == "D":
             like_unlikefunction(username)
         elif choice == "E":
-            get_comment_list(username)    # having problem printing the json file the whole for now
+            sentiment_analysis(username)    # having problem printing the json file the whole for now
         elif choice == "F":
             post_comment(username)
         elif choice == "G":
